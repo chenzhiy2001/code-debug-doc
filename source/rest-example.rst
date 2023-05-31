@@ -10,7 +10,7 @@ reStructuredText 基本语法
 
    `这里 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#hyperlinks>`_ 给出了在 Sphinx 中外部链接的引入方法。注意，链接的名字和用一对尖括号包裹起来的链接地址之间必须有一个空格。链接最后的下划线和片段的后续内容之间也需要有一个空格。
 
-   接下来是一个文档内部引用的例子。比如，戳 :doc:`chapter0/5setup-devel-env` 可以进入快速上手环节。
+   接下来是一个文档内部引用的例子。比如，戳 :doc:`chapter1/2related_work` 可以了解相关工作。
 
    文档间互引用：比如在关于进程的退出部分：
 
