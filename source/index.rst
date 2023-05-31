@@ -24,7 +24,6 @@ code-debug 操作系统调试器文档
    :caption: 相关文档
    :hidden:
 
-   final-lab
    appendix-a/index
    appendix-b/index
    appendix-c/index
