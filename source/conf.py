@@ -35,7 +35,6 @@ release = '23.5-alpha.1'
 extensions = [
     "sphinx_comments",
     "sphinxcontrib.mermaid",
-    "myst_parser"
 ]
 
 # mermaid_output_format = 'png'
