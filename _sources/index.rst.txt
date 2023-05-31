@@ -1,8 +1,3 @@
-.. rCore-Tutorial-Book-v3 documentation master file, created by
-   sphinx-quickstart on Thu Oct 29 22:25:54 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 code-debug 操作系统调试器文档
 ==================================================
 
@@ -63,8 +58,6 @@ code-debug 操作系统调试器文档
  
 在正式进行实验之前，请先按照代码仓库中的说明完成环境配置，再从第一章开始阅读正文。
 
-.. chyyuu 如果已经对 RISC-V 架构、Rust 语言和内核的知识有较多了解，第零章章末的 :doc:`/chapter0/6hardware` 提供了我们采用的真实硬件平台 Kendryte K210 的一些信息。
-
 项目协作
 ----------------------
 
@@ -73,7 +66,7 @@ code-debug 操作系统调试器文档
 - `项目的源代码仓库 <https://github.com/chenzhiy2001/code-debug>`_ && `文档仓库 <https://github.com/chenzhiy2001/code-debug-doc>`_
 - 时间仓促，本项目还有很多不完善之处，欢迎大家积极在每一个章节的评论区留言，或者提交 Issues 或 Pull Requests，让我们一起努力让本项目变得更好！
 
-项目进度
+致谢
 -----------------------
 
-- 2023-5-30：环境搭建完成，上传了论文。
+本文档仓库的风格借鉴了 `rCore-Tutorial-Book-v3 <http://rcore-os.cn/rCore-Tutorial-Book-v3/index.html>`_ ，在此向他们表示感谢！
