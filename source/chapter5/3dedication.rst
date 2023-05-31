@@ -5,4 +5,4 @@
 
 感谢rCore开源社区的大佬们！
 
-本文档仓库是学习[rCore-Tutorial-Book-v3](http://rcore-os.cn/rCore-Tutorial-Book-v3/index.html)搭建的。
+本文档仓库是学习`rCore-Tutorial-Book-v3 <http://rcore-os.cn/rCore-Tutorial-Book-v3/index.html>`_搭建的。
