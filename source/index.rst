@@ -3,7 +3,7 @@ code-debug 操作系统调试器文档
 
 .. toctree::
    :maxdepth: 2
-   :caption: 论文
+   :caption: 文档
    :hidden:
    
    chapter0/index
@@ -16,12 +16,10 @@ code-debug 操作系统调试器文档
 
 .. toctree::
    :maxdepth: 2
-   :caption: 相关文档
+   :caption: 附录
    :hidden:
 
    appendix-a/index
-   appendix-b/index
-   appendix-c/index
 
 
 .. toctree::
@@ -69,4 +67,4 @@ code-debug 操作系统调试器文档
 致谢
 -----------------------
 
-本文档仓库的风格借鉴了 `rCore-Tutorial-Book-v3 <http://rcore-os.cn/rCore-Tutorial-Book-v3/index.html>`_ ，在此向他们表示感谢！
+本文档仓库的风格借鉴了 `rCore-Tutorial-Book-v3 <http://rcore-os.cn/rCore-Tutorial-Book-v3/index.html>`_ ，在此向作者表示感谢！
