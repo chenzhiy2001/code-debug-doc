@@ -9,3 +9,4 @@
 - :download:`中期检查 <陈志扬-中期检查.doc>`
 - :download:`中期答辩 / OSATC2022 PPT <陈志扬-OSATC.pdf>`
 - :download:`毕业答辩 PPT <陈志扬-毕业答辩.pdf>`
+- :download:`论文翻译 <陈志扬-论文翻译.pdf>`
