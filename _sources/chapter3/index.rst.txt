@@ -6,7 +6,6 @@
 .. toctree::
    :maxdepth: 4
 
-   0intro
    1motivation
    2port_eBPF_to_os
    3eBPF_server
