@@ -2,10 +2,10 @@
 <html class="no-js" lang="zh_CN">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" /><link rel="next" title="第五章 总结与展望" href="../chapter5/index.html" /><link rel="prev" title="内核态与用户态间方便的切换跟踪" href="2trace_between_u_m.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" /><link rel="next" title="修改和构建本项目" href="../setup-sphinx.html" /><link rel="prev" title="相关文档" href="../appendix-a/index.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2022.06.21"/>
-        <title>系统调用跟踪及系统调用参数的获取 - code-debug-doc 23.5-alpha.1 文档</title>
+        <title>心得总结 - code-debug-doc 23.5-alpha.1 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -155,7 +155,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">文档</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter0/index.html">第零章 Front Matter</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../chapter0/0intro.html">面向rCore-Tutorial操作系统的调试工具</a></li>
 </ul>
@@ -198,11 +198,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../chapter3/3eBPF_server.html">多道程序与协作式调度</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">第四章 案例展示</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="0intro.html">引言</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1get_privilege.html">当前特权级检测</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2trace_between_u_m.html">内核态与用户态间方便的切换跟踪</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">系统调用跟踪及系统调用参数的获取</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter4/index.html">第四章 案例展示</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/0intro.html">引言</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/1get_privilege.html">当前特权级检测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/2trace_between_u_m.html">内核态与用户态间方便的切换跟踪</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/3syscall_and_arguments_tracing.html">系统调用跟踪及系统调用参数的获取</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter5/index.html">第五章 总结与展望</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -214,11 +214,11 @@
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">附录</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../appendix-a/index.html">相关文档</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../appendix-b/index.html">心得总结</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">心得总结</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">开发注记</span></p>
 <ul>
@@ -263,60 +263,17 @@
         </div>
         <article role="main">
           <div class="section" id="id1">
-<h1>系统调用跟踪及系统调用参数的获取<a class="headerlink" href="#id1" title="永久链接至标题">#</a></h1>
-<p>我们以系统调用跟踪及系统调用参数的获取为例，展示这套调试工具的使用流程。</p>
-<p>首先，在 rCore-Tutorial-v3 中，每个系统调用都会被分发到对应的内核函数中进行处理，这些函数最多只有三个参数。根据RISC-V的函数调用规范（calling conventions），它的函数调用过程通常分为以下6个阶段[7]：</p>
-<ol class="arabic simple">
-<li><p>将参数存储到函数能够访问到的位置；</p></li>
-<li><p>跳转到函数开始位置(使用 RV32I 的 jal 指令)；</p></li>
-<li><p>获取函数需要的局部存储资源，按需保存寄存器；</p></li>
-<li><p>执行函数中的指令；</p></li>
-<li><p>将返回值存储到调用者能够访问到的位置，恢复寄存器，释放局部存储资源；</p></li>
-<li><p>返回调用函数的位置(使用 ret 指令)。</p></li>
-</ol>
-<p>在第三个阶段结束后获取函数的参数是比较容易的。查阅函数调用规范（图4.9）后可知，我们需要的三个函数调用参数会分别被放在a0, a1 和 a2 寄存器上。</p>
-<img alt="../_images/4-9.png" class="align-center" id="risc-v" src="../_images/4-9.png" />
-<p>因此，若要获取系统调用的参数，我们只需要编写一个能获取寄存器信息的 eBPF 程序，并在需要跟踪的系统调用对应的内核函数上插桩即可。</p>
-<p>eBPF 程序可以用多种语言编写，在这里我们选用 C 语言。eBPF 程序的代码如下：</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;bpf.h&quot;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;kprobe.h&quot;</span>
-<span class="kt">int</span><span class="w"> </span><span class="nf">bpf_prog</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">kprobe_bpf_ctx</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="n">bpf_trace_printk</span><span class="p">(</span><span class="s">&quot;%&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">//字符串是rust 格式的</span>
-<span class="n">bpf_trace_printk</span><span class="p">(</span><span class="s">&quot;R&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">//用于标识消息类别</span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">   </span><span class="n">bpf_trace_printk</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ctx</span><span class="o">-&gt;</span><span class="n">tf</span><span class="p">.</span><span class="n">regs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="c1">//发送寄存器数据</span>
-<span class="p">}</span>
-<span class="n">bpf_trace_printk</span><span class="p">(</span><span class="s">&quot;#&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="n">bpf_trace_printk</span><span class="p">(</span><span class="s">&quot;00&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>需要注意的是，由于 rCore-Tutorial-v3 的eBPF模块的字符串处理例程直接调用了 Rust 语言的字符串处理函数，因此字符串是 Rust 格式的。编写后，用 Clang 编译器编译到 eBPF 目标。
-接着，将编译出的目标文件以硬编码的形式存储在eBPF Server中。至此代码的修改完成，我们可以编译、启动整套调试工具。
-我们在在线 IDE 中点击“运行 - 调试”，调试工具就会自动连接到虚拟机提供的 gdbserver。然后我们可以设置 main-stub 的断点：</p>
-<img alt="../_images/4-10.png" class="align-center" id="gdbserver" src="../_images/4-10.png" />
-<img alt="../_images/4-11.png" class="align-center" id="qemu" src="../_images/4-11.png" />
-<img alt="../_images/4-12.png" class="align-center" id="main-stub" src="../_images/4-12.png" />
-<p>在设置完main-stub的断点后，我们按“continue”启动虚拟机。启动之后，在终端中打开 eBPF Server，此时 eBPF Server 可以通过串口和 GDB 中对应的子模块通信：</p>
-<img alt="../_images/4-13.png" class="align-center" id="ebpf-serverebpf-server" src="../_images/4-13.png" />
-<p>我们让GDB 中对应的子模块连接到 eBPF Server。在调试控制台中输入下列命令启用GDB中的eBPF子模块：</p>
-<p>so ~/rCore-Tutorial-v3-eBPF/rCore-Tutorial-v3/side-stub.py</p>
-<p>调试控制台输出以下信息，表示成功启用该模块。</p>
-<p>{“token”:14,”outOfBandRecord”:[],”resultRecords”:{“resultClass”:”done”,”results”:[]}}</p>
-<p>接着令这个模块通过串口连接到eBPF Server：</p>
-<p>-side-stub target remote /dev/pts/4</p>
-<p>调试控制台输出以下信息，这说明连接成功：</p>
-<p>{“token”:18,”outOfBandRecord”:[],”resultRecords”:{“resultClass”:”done”,”results”:[]}}</p>
-<p>最后输入要跟踪的系统调用。此处我们以 sys_open 为例：</p>
-<blockquote>
-<div><p>-side-stub break sys_open then-get register-info</p>
-</div></blockquote>
-<p>调试控制台再次响应，表示插桩成功：</p>
-<p>{“token”:19,”outOfBandRecord”:[],”resultRecords”:{“resultClass”:”done”,”results”:[]}}</p>
-<p>接下来可以看到，当我们跟踪的内核函数被触发时，eBPF程序运行并收集信息，返回了我们需要的三个参数：</p>
-<img alt="../_images/4-14.png" class="align-center" id="ebpf" src="../_images/4-14.png" />
-<img alt="../_images/4-15.png" class="align-center" id="id2" src="../_images/4-15.png" />
+<h1>心得总结<a class="headerlink" href="#id1" title="永久链接至标题">#</a></h1>
+<p>开源毕设最重要的是兴趣，只要是自己感兴趣的题目，做起来就很上头，停不下来；相反，如果没兴趣的话就很难坚持下去。</p>
+<p>做这个操作系统调试器花费了半年多，基本每周都开组会交流，持续时间比较长，所以除了兴趣，时间管理，精力管理也很重要。</p>
+<p>能够表达自己的问题也很重要。刚开始遇到困难我只会说做不下去，说不出来问题所在，然后向老师只能不厌其烦地重复项目中最核心的思路。后来渐渐学会一点表达的技巧，就是多用概括性的语言，抓住重点。</p>
+<p>除了表述问题的能力，写文档的能力也很重要。首先是给自己留下个记录，以免一段时间之后忘记开发细节，其次是给论文留下素材，我这回论文就没写好，答辩的时候老师看不出工作量，很吃亏。</p>
+<p>就算这一周没什么进展，也尽量参加组会。组会的每周纪要刚开始我觉得很麻烦，一段时间后就发现它的价值了。</p>
+<p>写程序时遇到很多困难，这些困难都有一个共同的特点，就是它们涉及多个元素之间的交互。就像三体运动一样难以预测。诀窍在于彻底弄清楚这个模块和其它模块之间的关系，然后按照时间顺序分析。写程序其实就是设计一台假想的机器。脑子里要有一台假想的计算机。</p>
+<p>如果实在弄不明白，应该回头复习一下理论知识。多联系rCore指导书和课堂里学到的知识，在写代码的时候经常会用上。</p>
+<p>踩过的最大的坑是代码不规范，最核心的内核态用户态切换跟踪那块代码的注释自己都看不懂，和其他同学协作起来就很费劲。</p>
+<p>除此之外，我发现我能够写一些抽象层次比较高的程序了。因为烂代码写太多了，明白为什么要这样那样的抽象了。</p>
+<p>最后再次感谢向老师和吴老师的指导。每次迷茫的时候老师们总是能指明方向。</p>
 </div>
 
         </article>
@@ -324,23 +281,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../chapter5/index.html">
+          <a class="next-page" href="../setup-sphinx.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">第五章 总结与展望</div>
+                <div class="title">修改和构建本项目</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="2trace_between_u_m.html">
+          <a class="prev-page" href="../appendix-a/index.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">内核态与用户态间方便的切换跟踪</div>
+                <div class="title">相关文档</div>
                 
               </div>
             </a>
