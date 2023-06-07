@@ -20,6 +20,7 @@ code-debug 操作系统调试器文档
    :hidden:
 
    appendix-a/index
+   appendix-b/index
 
 
 .. toctree::
