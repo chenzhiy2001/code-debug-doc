@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" /><link rel="next" title="第四章 案例展示" href="../chapter4/index.html" /><link rel="prev" title="将eBPF模块移植到rCore-Tutorial-v3" href="2port_eBPF_to_os.html" />
 
     <meta name="generator" content="sphinx-4.3.2, furo 2022.06.21"/>
-        <title>多道程序与协作式调度 - code-debug-doc 23.5-alpha.1 文档</title>
+        <title>eBPF server 的实现 - code-debug-doc 23.5-alpha.1 文档</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -195,7 +195,7 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">第三章 基于 eBPF 技术的跟踪调试</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="1motivation.html">引言</a></li>
 <li class="toctree-l2"><a class="reference internal" href="2port_eBPF_to_os.html">将eBPF模块移植到rCore-Tutorial-v3</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">多道程序与协作式调度</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">eBPF server 的实现</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../chapter4/index.html">第四章 案例展示</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -262,10 +262,10 @@
           </label>
         </div>
         <article role="main">
-          <div class="section" id="id1">
-<h1>多道程序与协作式调度<a class="headerlink" href="#id1" title="永久链接至标题">#</a></h1>
-<div class="section" id="id2">
-<h2>整体构想<a class="headerlink" href="#id2" title="永久链接至标题">#</a></h2>
+          <div class="section" id="ebpf-server">
+<h1>eBPF server 的实现<a class="headerlink" href="#ebpf-server" title="永久链接至标题">#</a></h1>
+<div class="section" id="id1">
+<h2>整体构想<a class="headerlink" href="#id1" title="永久链接至标题">#</a></h2>
 <p>我们的整体构想是，运用两种跟踪技术，即 gdbserver 和 eBPF server ，同时跟踪同一个目标（target），即虚拟机中运行的rCore-Tutorial-v3 操作系统。我们把会改变操作系统状态的那个跟踪技术（Qemu 的 gdbserver 或 OpenOCD ）称为 main-stub，eBPF 的 gdbserver 称为 side-stub。Main-stub 具有可以改变操作系统运行状态的控制能力，而 side-stub 只负责收集信息，不影响内核的状态。下表详细展示了 main-stub 和 side-stub 功能与局限，可以看出，二者形成了很好的互补：</p>
 <p>表3.1 eBPF Server 和 gdbserver 对比</p>
 <div class="table-wrapper docutils container">
@@ -339,11 +339,11 @@ Server</strong></p></th>
 <p>基于串口的 GDB 与 eBPF server 的通信机制
 ———————————————–s</p>
 <p>将由于 rCore-Tutorial-v3 的终端已经占用了一个串口用于文字输入输出，为了不影响操作系统的运行状态，eBPF Server 需要用另一个专属的串口来和 GDB 通信。关于给虚拟机添加更多串口，大部分网上的资料仅提到添加一个 Qemu 启动参数，但是经过实际测试后发现这不起作用。原因是Qemu 虚拟机并未支持 RISC-V 平台的多串口收发。因此，我们修改了 Qemu 虚拟机的源代码，为新串口分配了 MMIO 地址和 IRQ（中断号）：</p>
-<img alt="../_images/3-1.png" class="align-center" id="id3" src="../_images/3-1.png" />
+<img alt="../_images/3-1.png" class="align-center" id="id2" src="../_images/3-1.png" />
 <img alt="../_images/3-2.png" class="align-center" id="mmio" src="../_images/3-2.png" />
-<img alt="../_images/3-3.png" class="align-center" id="id4" src="../_images/3-3.png" />
+<img alt="../_images/3-3.png" class="align-center" id="id3" src="../_images/3-3.png" />
 <p>还修改了设备树初始化函数：</p>
-<img alt="../_images/3-4.png" class="align-center" id="id5" src="../_images/3-4.png" />
+<img alt="../_images/3-4.png" class="align-center" id="id4" src="../_images/3-4.png" />
 <p>我们发现运行在修改后的 Qemu 中的 rCore-Tutorial-v3 操作系统可以给第二个串口发送消息，但不能接收基于中断机制的消息。这是因为在 RISC-V 中，存在用于保护物理地址的寄存器 pmpcfg 和 pmpaddr [6]。而 rCore-Tutorial-v3 的 SBI（rustsbi-qemu）通过设置这两个寄存器的值，使得只有 SBI 部分和 OS 所在的地址空间可以使用，而PLIC、串口等设备所在的物理地址不可以使用。为了调试方便，我们修改了SBI对 pmpcfg 和 pmpaddr 的设置，使得所有物理地址都可以被使用。</p>
 <p>同时，为了支持第二个串口的通信，我们参考原有的串口相关的代码，对 rCore-Tutorial-v3 做了尽可能少的修改，修改内容包括：添加第二个串口的初始化例程、修改中断处理例程、添加用于在第二个串口收发单字节的系统调用和 eBPF 帮助函数（helper functions）。</p>
 <p>至此，我们实现了基于中断的多串口数据收发，使得 GDB 与 eBPF server 可以通过串口通信。需要注意的是，eBPF 依赖的内核模块是不能通过 eBPF 本身来调试的。比如，eBPF Server 依赖内核的串口，如果我们试图让 eBPF server 跟踪这个串口的行为，那么 eBPF Server 收集的数据也会通过这个串口来发送，这又会触发 eBPF Server 的跟踪，进而陷入死循环。</p>
@@ -354,11 +354,11 @@ Server</strong></p></th>
 <img alt="../_images/3-5.png" class="align-center" id="rsp" src="../_images/3-5.png" />
 <p>其中，“$”用于标识数据包的开头，packet-data是传送的实际数据，checksum（即校验值）是“$”和“#”之间所有字符的模 256 和，它是八位无符号整数，编码成ASCII字符后一定占用两个字符，所以“checksum”这三个字符标示了一个数据包的结束。通信的双方在接收到数据包后，可以发送单个“+”字符表示数据包接收成功，或发送”-“表示数据包接收失败，要求重发。</p>
 <p>除此之外，还有一种通知数据包（Notification Packet）。它和普通的数据包的区别有两个：1）普通数据包的交流机制是同步的，而通知数据包是异步的，常用于通知 GDB 某个事件的发生，2）收到通知数据包后无需像普通数据包一样发送“+”或“-”。通知数据包的格式如下图所示，可以看到，通知数据包以字符“%”标识开头，而其余的格式和普通的数据包是一致的：</p>
-<img alt="../_images/3-6.png" class="align-center" id="id6" src="../_images/3-6.png" />
+<img alt="../_images/3-6.png" class="align-center" id="id5" src="../_images/3-6.png" />
 <p>这套协议比较简明，且能满足我们的需求，因此，我们在GDB中增加一个子模块，让这个子模块使用 RSP 协议和 side-stub 进行通信。考虑到这个子模块将会有一个持续从串口接收字节流的线程，且有很多字符串处理流程，我们选择用 python 语言来编写这个模块，因为用 python 语言创建和管理线程比较简单，且已经有功能强大的 pyserial 库能够便捷地处理串口消息的收发。</p>
 <p>虽然 main-stub 和 side-stub 都使用 RSP 协议，但是在实际的通信上，main-stub 主要以同步的方式收发消息，这是因为Qemu 的 gdbserver 的调试机制是同步的：Qemu 的 gdbserver 一般是在断点被触发，被调试的操作系统停下之后，才开始收集信息的。相比之下，side-stub 的跟踪调试功能主要依赖内核插桩机制，在插桩触发之后 eBPF 程序收集数据，收集完毕后eBPF程序立即退出，操作系统继续运行。side-stub 不会，也不能为了和 GDB 通信而让操作系统停下（而且，操作系统的 eBPF 模块有 verifier 子模块专门用于确保这一点）。因此大部分的信息都会以异步的方式传送给GDB。这种异步的消息处理方式提供了更高的并发性和响应性。然而，异步的消息可能会与同步的消息重合，这就要求和 side-stub 通信的 GDB 子模块具有较好的鲁棒性，能恰当地处理同步信息的字节流被异步信息的字节流打断的情况。</p>
 <p>如前文所述，RSP 协议规定，同步的消息以字符“#”开头，而异步的消息以字符“%”开头。利用这个特点，我们设计了一个消息处理流程，可以确保消息的有序处理（图3.7）：GDB中负责和 side-stub 通信的子模块逐字节接收来自 side-stub 的消息，默认情况下按同步信息处理，如果发现接收到了字符“%”，则接下来接收到的字节都放入异步消息处理例程，直到接收到“#”符号和后续的两个校验值后，再返回原来的同步消息处理流程继续从串口接收同步信息。这样，就算同步消息被异步消息打断，同步消息和异步消息都能被完整地接收。</p>
-<img alt="../_images/3-7.png" class="align-center" id="id7" src="../_images/3-7.png" />
+<img alt="../_images/3-7.png" class="align-center" id="id6" src="../_images/3-7.png" />
 <p>由于多个 eBPF 程序不会并发运行，因此异步消息流之间是按顺序发送的，不会互相重叠；运行 eBPF 程序时，操作系统其他部分是不运行的，操作系统中负责收发同步消息的用户态进程也不运行，直到 eBPF 程序发送完了异步消息后，这个用户态进程才会继续运行，继续同步消息的发送，这种机制可以确保异步消息不会被同步消息打断。</p>
 <p>上述异步消息处理例程的代码如下：</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">read_async_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">starts_with</span><span class="p">):</span>
@@ -492,8 +492,8 @@ Server</strong></p></th>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">多道程序与协作式调度</a><ul>
-<li><a class="reference internal" href="#id2">整体构想</a></li>
+<li><a class="reference internal" href="#">eBPF server 的实现</a><ul>
+<li><a class="reference internal" href="#id1">整体构想</a></li>
 <li><a class="reference internal" href="#gdb-ebpf-server-rsp">在 GDB 和 eBPF Server 之间实现 RSP 协议</a></li>
 <li><a class="reference internal" href="#debug-adapter-ebpf-server">在 Debug Adapter 中适配 eBPF Server</a></li>
 <li><a class="reference internal" href="#ide-ebpf-server">在在线 IDE 中适配 eBPF Server</a></li>
