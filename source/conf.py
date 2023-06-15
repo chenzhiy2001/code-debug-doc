@@ -24,7 +24,7 @@ language = 'zh_CN'
 html_search_language = 'zh'
 
 # The full version, including alpha/beta/rc tags
-release = '23.5-alpha.1'
+release = '23.6-alpha.1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -53,6 +53,11 @@ comments_config = {
        "theme": "github-light",
        "crossorigin": "anonymous",
    }
+}
+
+# remove empty pages in PDF output. See https://stackoverflow.com/questions/5422997/sphinx-docs-remove-blank-pages-from-generated-pdfs
+latex_elements = {
+  'extraclassoptions': 'openany,oneside'
 }
 
 # Add any paths that contain templates here, relative to this directory.
